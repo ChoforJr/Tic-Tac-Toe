@@ -47,11 +47,12 @@
 .header span{
     font-size: 1.8rem;
     font-weight: bold;
+    margin-left: -16.5rem;
 }
-#player1Score{
+#player1ScoreOutput{
     color: green;
 }
-#player2Score{
+#player2ScoreOutput{
     color: red;
 }
 #restartBtn{

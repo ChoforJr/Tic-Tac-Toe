@@ -20,6 +20,9 @@ const TicTacToe = (function() {
     let player1Score = 0;
     let player2Score = 0;
 
+    document.querySelector("#player1ScoreOutput").textContent = `${player1Score}`;
+    document.querySelector("#player2ScoreOutput").textContent = `${player2Score}`;
+
     const gamePlay = (player1,player2) => {
       if(player1Win === 3) return alert("player 1 is the winner, start a new game");
       if(player2Win === 3) return alert("player 2 is the winner, start a new game");
@@ -108,3 +111,41 @@ const TicTacToe = (function() {
 
 //TicTacToe.gamePlay();  TicTacToe.winConditions;   TicTacToe.playerContainer;   TicTacToe.reStart();
 //For player 1 - TicTacToe.gamePlay(true, false);   For player 2 - TicTacToe.gamePlay(false,true);
+
+const NameChanger = (function() {
+  const player1Name = document.querySelector("#player1Name");
+  const player1DisplayName = document.querySelector("#player1DisplayName");
+  const player1DisplayScore = document.querySelector("#player1DisplayScore");
+  const player1Btn = document.querySelector(".player1Btn").addEventListener("click", (event) =>{
+    if (player1Name.value.trim() === '') {
+      alert('Please enter a Name');
+      return;
+    }
+    if (event.ctrlKey){
+      event.preventDefault();
+      player1DisplayName.textContent = `${player1Name.value}`;
+      player1DisplayScore.textContent = `${player1Name.value}'s Score: `;
+      player1Name.value = '';
+    }
+  })
+
+  const player2Name = document.querySelector("#player2Name");
+  const player2DisplayName = document.querySelector("#player2DisplayName");
+  const player2DisplayScore = document.querySelector("#player2DisplayScore");
+  const player2Btn = document.querySelector(".player2Btn").addEventListener("click", (event) =>{
+    if (player2Name.value.trim() === '') {
+      alert('Please enter a Name');
+      return;
+    }
+    if (event.shiftKey){
+      event.preventDefault();
+      player2DisplayName.textContent = `${player2Name.value}`;
+      player2DisplayScore.textContent = `${player2Name.value}'s Score: `;
+      player2Name.value = '';
+    }
+  })
+  return {
+    player1Btn,
+    player2Btn,
+  }
+})();
