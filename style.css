@@ -87,11 +87,13 @@
 }
 .player p{
     font-size: 2rem;
+    color: #f8fafc;
+    font-weight: bold;
 }
 .playerForm li{
     font-size: 2rem;
     text-align: left;
-    color: #f8fafc;;
+    color: #f8fafc;
     margin-left: 1rem;
     list-style-type: none;
     margin-bottom: 1rem;
@@ -125,6 +127,9 @@
     grid-template-columns: repeat(auto-fit,minmax(10rem,1fr));
     margin: 1rem auto 1rem;
 }
+.boardBtn{
+    font-size: 5rem;
+}
 
 
 .result{
@@ -139,6 +144,7 @@
     margin-left: 5rem;
 }
 .result p{
-    font-size: 2rem;
+    font-size: 3rem;
     margin-bottom: 1rem;
+    color: blue;
 }

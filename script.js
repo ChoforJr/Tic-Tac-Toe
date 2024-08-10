@@ -1,5 +1,4 @@
 const TicTacToe = (function() {
-    const gameBoard = ['A','B','C','D','E','F','G','H','I'];
 
     const winConditions = {
       cond1 :['A','B','C'],
@@ -20,41 +19,83 @@ const TicTacToe = (function() {
     let player1Score = 0;
     let player2Score = 0;
 
-    document.querySelector("#player1ScoreOutput").textContent = `${player1Score}`;
-    document.querySelector("#player2ScoreOutput").textContent = `${player2Score}`;
-
-    const gamePlay = (player1,player2) => {
-      if(player1Win === 3) return alert("player 1 is the winner, start a new game");
-      if(player2Win === 3) return alert("player 2 is the winner, start a new game");
-      if(playerContainer.length === 9) return alert("Its a draw, start a new game");
-
-      if(player1 && player2) return console.log("One player at a time");
-      if(!player1 && !player2) return console.log("Don't you want to play?");
-
-      let player1Input
-      let player2Input
-
-      if(player1) {
-        player1Input = prompt('Your move player 1');
-        player1Input = player1Input.toString().toUpperCase();
-      }else if(player2) {
-        player2Input = prompt('Your move player 2');
-        player2Input = player2Input.toString().toUpperCase();
+    //Name Changer start
+    const player1Name = document.querySelector("#player1Name");
+    const player1DisplayName = document.querySelector("#player1DisplayName");
+    const player1DisplayScore = document.querySelector("#player1DisplayScore");
+    let player1;
+    const player1Btn = document.querySelector(".player1Btn").addEventListener("click", (event) =>{
+      if (player1Name.value.trim() === '') {
+        alert('Please enter a Name');
+        return;
       }
+        event.preventDefault();
+        player1Score = 0;
+        document.querySelector("#player1ScoreOutput").textContent = `0`;
+        player1DisplayName.textContent = `${player1Name.value}`;
+        player1DisplayScore.textContent = `${player1Name.value}'s Score: `;
+        player1 = `${player1DisplayName.textContent}`;
+        player1Name.value = '';
+    });
 
-      if(gameBoard.includes(player1Input) || gameBoard.includes(player2Input)) {
-      }else{
-        return console.log("Wrong input");
+    const player2Name = document.querySelector("#player2Name");
+    const player2DisplayName = document.querySelector("#player2DisplayName");
+    const player2DisplayScore = document.querySelector("#player2DisplayScore");
+    let player2;
+    const player2Btn = document.querySelector(".player2Btn").addEventListener("click", (event) =>{
+      if (player2Name.value.trim() === '') {
+        alert('Please enter a Name');
+        return;
       }
+        event.preventDefault();
+        player2Score = 0;
+        document.querySelector("#player2ScoreOutput").textContent = `0`;
+        player2DisplayName.textContent = `${player2Name.value}`;
+        player2DisplayScore.textContent = `${player2Name.value}'s Score: `;
+        player2 = `${player2DisplayName.textContent}`;
+        player2Name.value = '';
+    });
+    //Name Changer end
 
+    const resultDisplay = document.querySelector('#resultDisplay');
+
+    //Logic of the board buttons start here, this is the button Function
+    const boardBtn = document.querySelectorAll('.boardBtn').forEach((button) => {
+      button.addEventListener('click', btnAction);
+    });
+    function btnAction(event) {
+      let btn = event.target.id; 
+      if (event.ctrlKey){
+        if(player1Win === 3) return;
+        if(player2Win === 3) return;
+        if(playerContainer.length === 9) return;
+        if(!playerContainer.includes(btn)) {
+          document.querySelector(`#${btn}`).textContent ='x';
+        }
+        gamePlay(btn,null);
+        document.querySelector("#player1ScoreOutput").textContent = `${player1Score}`;
+      }else if (event.shiftKey){
+        if(player1Win === 3) return;
+        if(player2Win === 3) return;
+        if(playerContainer.length === 9) return;
+        if(!playerContainer.includes(btn)) {
+          document.querySelector(`#${btn}`).textContent ='o';
+        }
+        gamePlay(null,btn);
+        document.querySelector("#player2ScoreOutput").textContent = `${player2Score}`;
+      }
+    }
+
+    //Game play Function
+    const gamePlay = (player1Input,player2Input) => {
       if(playerContainer.includes(player1Input) || playerContainer.includes(player2Input)) {
-        return console.log("already selected");
+        return alert("already selected");
       }
 
-      if(player1) {
+      if(typeof player1Input == "string"){
         playerContainer.push(player1Input);
       }
-      if(player2) {
+      if(typeof player2Input == "string"){
         playerContainer.push(player2Input);
       }
 
@@ -73,7 +114,10 @@ const TicTacToe = (function() {
         });
         if(player1Win === 3) {
           player1Score++;
-          return alert("player 1 is the winner, start a new game");
+          if(player1 == undefined){
+            return resultDisplay.textContent = `Player 1 is the winner, start a new game`;
+          }
+          return resultDisplay.textContent = `${player1} is the winner, start a new game`;
         }
         if(player1Win !== 3) player1Win=0;
 
@@ -84,14 +128,19 @@ const TicTacToe = (function() {
         });
         if(player2Win === 3) {
           player2Score++;
-          return alert("player 2 is the winner, start a new game");
+          if(player2 == undefined){
+            return resultDisplay.textContent = `Player 2 is the winner, start a new game`;
+          }
+          return resultDisplay.textContent = `${player2} is the winner, start a new game`;
         }
         if(player2Win !== 3) player2Win=0;
       }
-      if(playerContainer.length === 9) return alert("Its a draw, start a new game");
+      if(playerContainer.length === 9) return resultDisplay.textContent = `Its a draw, start a new game`;
     };
 
-    const reStart = () =>{
+    //Restart Function
+    const restartBtn = document.querySelector('#restartBtn').addEventListener('click', () =>{
+      resultDisplay.textContent = `Come on! start the game`;
       playerContainer.length = 0;
       player1Win = 0;
       player2Win = 0;
@@ -99,53 +148,19 @@ const TicTacToe = (function() {
         winConditions[prop] = winConditions[prop].filter(e => e !== 'x');
         winConditions[prop] = winConditions[prop].filter(e => e !== 'o');
       }
-    };
+      document.querySelectorAll('.boardBtn').forEach( (button) => {
+        button.textContent ='';
+      });
+    });
 
     return {
-      gamePlay,
+      boardBtn,
       winConditions,
       playerContainer,
-      reStart,
+      player1Btn,
+      player2Btn,
+      restartBtn,
     }
   })();
 
 //TicTacToe.gamePlay();  TicTacToe.winConditions;   TicTacToe.playerContainer;   TicTacToe.reStart();
-//For player 1 - TicTacToe.gamePlay(true, false);   For player 2 - TicTacToe.gamePlay(false,true);
-
-const NameChanger = (function() {
-  const player1Name = document.querySelector("#player1Name");
-  const player1DisplayName = document.querySelector("#player1DisplayName");
-  const player1DisplayScore = document.querySelector("#player1DisplayScore");
-  const player1Btn = document.querySelector(".player1Btn").addEventListener("click", (event) =>{
-    if (player1Name.value.trim() === '') {
-      alert('Please enter a Name');
-      return;
-    }
-    if (event.ctrlKey){
-      event.preventDefault();
-      player1DisplayName.textContent = `${player1Name.value}`;
-      player1DisplayScore.textContent = `${player1Name.value}'s Score: `;
-      player1Name.value = '';
-    }
-  })
-
-  const player2Name = document.querySelector("#player2Name");
-  const player2DisplayName = document.querySelector("#player2DisplayName");
-  const player2DisplayScore = document.querySelector("#player2DisplayScore");
-  const player2Btn = document.querySelector(".player2Btn").addEventListener("click", (event) =>{
-    if (player2Name.value.trim() === '') {
-      alert('Please enter a Name');
-      return;
-    }
-    if (event.shiftKey){
-      event.preventDefault();
-      player2DisplayName.textContent = `${player2Name.value}`;
-      player2DisplayScore.textContent = `${player2Name.value}'s Score: `;
-      player2Name.value = '';
-    }
-  })
-  return {
-    player1Btn,
-    player2Btn,
-  }
-})();
