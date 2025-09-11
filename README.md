@@ -2,4 +2,4 @@
 
 Tic Tac Toe - Project
 
-Author : Forsakang Chofor Junior
+# Author : FORSAKANG CHOFOR JUNIOR
